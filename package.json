@@ -1,0 +1,32 @@
+{
+  "name": "swagger-convert-typescript",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "bin": {
+    "localization": "index.js"
+  },
+  "files": [
+    "index.js",
+    "func/func.js",
+    "func/json.js",
+    "func/mongo.js",
+    "func/step1.js",
+    "func/step2.js",
+    "func/template.js"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.23.0",
+    "fs-extra": "^10.0.0",
+    "handlebars": "^4.7.7",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.0.11",
+    "request": "^2.88.2",
+    "yargs": "^17.2.1"
+  }
+}
