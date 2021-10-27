@@ -1,6 +1,6 @@
 {
   "name": "swagger-convert-typescript",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,8 @@
     "func/step1.js",
     "func/step2.js",
     "func/template.js",
-    "func/teamsmessage.js"
+    "func/teamsmessage.js",
+    "README.md"
   ],
   "author": "",
   "license": "ISC",

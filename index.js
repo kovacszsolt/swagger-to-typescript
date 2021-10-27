@@ -17,7 +17,7 @@ const argv = yargs
     .describe('d', 'Debug enable - temporarily file: debug.json')
 
     .alias('pt', 'purgetarget')
-    .default('pt', true)
+    .default('pt', false)
     .describe('pt', 'Purge target directory')
 
     .alias('pe', 'pathenum')
@@ -151,3 +151,8 @@ if ((inputFile.substr(0, 8) === 'https://') || (inputFile.substr(0, 7) === 'http
     main = fsExtra.readJsonSync(inputFile);
     dataProcess();
 }
+
+
+
+
+

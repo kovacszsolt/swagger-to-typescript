@@ -1,5 +1,5 @@
-const templateMock = `
-import { {{objectName}}Interface } from '{{interfacePathSymbol}}{{filePath}}/{{fileName}}.interface';
+const templateMock =
+`import { {{objectName}}Interface } from '{{interfacePathSymbol}}{{filePath}}/{{fileName}}.interface';
 
 {{#importList}}
 {{#ifCond fileType "interface"}}
@@ -22,8 +22,8 @@ const {{objectName}}Mock: {{objectName}}Interface = {
 }
 `;
 
-const templateEnum = `
-/**
+const templateEnum =
+`/**
  * sourceName: {{sourceName}}
  * lineNumber: {{lineNumber}}
  */
@@ -43,8 +43,8 @@ export enum {{objectName}}EnumLabel {
 }
 `;
 
-const templateModel = `
- /**
+const templateModel =
+`/**
  * sourceName: {{sourceName}}
  * lineNumber: {{lineNumber}}
  */
@@ -59,18 +59,17 @@ import { {{objectName}}Enum } from '{{../enumPathSymbol}}{{filePath}}/{{fileName
 import { {{objectName}}Model } from '{{../modelPathSymbol}}{{filePath}}/{{fileName}}.model';
     {{/ifCond}}
 {{/importList}}
-
-{{#if description}}/**
+{{#if description}}
+/**
  * {{description}}
  */{{/if}}
 export class {{objectName}}Model implements {{objectName}}Interface {
 {{#propertyList}}
 {{#if description}}
-/**
- * {{description}}
- */
+    /**
+     * {{description}}
+     */
 {{/if}}
-
     {{name}}: {{typeName}}{{#ifCond type "enum"}}Enum{{/ifCond}}{{#ifCond type "object"}}Model{{/ifCond}}{{#ifCond type "array_object"}}Model[]{{/ifCond}};
 {{/propertyList}}
 
@@ -92,8 +91,8 @@ export class {{objectName}}Model implements {{objectName}}Interface {
     }
 }
 `;
-const templateInterface = `
-/**
+const templateInterface =
+`/**
  * sourceName: {{sourceName}}
  * lineNumber: {{lineNumber}}-{{enumPath}}-
  */
@@ -105,15 +104,16 @@ import { {{objectName}}Enum } from '{{../enumPathSymbol}}{{filePath}}/{{fileName
 import { {{objectName}}Interface } from '{{../interfacePathSymbol}}{{filePath}}/{{fileName}}.interface';
 {{/ifCond}}
 {{/importList}}
-{{#if description}}/**
+{{#if description}}
+/**
  * {{description}}
  */{{/if}}
 export interface {{objectName}}Interface {
 {{#propertyList}}
 {{#if description}}
-/**
- * {{description}}
-*/
+    /**
+     * {{description}}
+     */
 {{/if}}
     {{name}}: {{typeName}}{{#ifCond type "enum"}}Enum{{/ifCond}}{{#ifCond type "object"}}Interface{{/ifCond}}{{#ifCond type "array_object"}}Interface[]{{/ifCond}};
     {{/propertyList}}

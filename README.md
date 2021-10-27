@@ -11,7 +11,7 @@ npx swagger-to-typescript [parameters]
 --ip, --inputpath             Swagger input file path           [required]  
 -d, --debug                       Debug enable - temporarily file: debug.json
 [default: true]  
---pt, --purgetarget           Purge target directory       [default: true]  
+--pt, --purgetarget           Purge target directory       [default: false]  
 --pe, --pathenum              Enum file path  
 --pi, --pathinterface         Interface file path  
 --pm, --pathmodel             Single Path  
