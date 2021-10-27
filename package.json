@@ -16,7 +16,8 @@
     "func/mongo.js",
     "func/step1.js",
     "func/step2.js",
-    "func/template.js"
+    "func/template.js",
+    "func/teamsmessage.js"
   ],
   "author": "",
   "license": "ISC",

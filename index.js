@@ -80,6 +80,15 @@ const argv = yargs
     .default('cjs', false)
     .describe('cjs', 'Compare type json save result')
 
+    .alias('tu', 'teamsurl')
+    .default('tu', '')
+    .describe('tu', 'Microsoft Teams webhook URL')
+
+    .alias('tt', 'teamstitle')
+    .default('teamstitle', 'API CHANGED')
+    .describe('teamstitle', 'Microsoft Teams message Title')
+
+
     .demandOption(['ip'])
     .help('h')
     .argv;
@@ -107,6 +116,9 @@ const compareJSONSave = argv['cjs'];
 
 const nameSpace = argv['ns'];
 
+const teamsUrl = argv['tu'];
+const teamsTitle = argv['teamstitle'];
+
 
 const purgetarget = argv['pt'];
 let rawFile;
@@ -119,7 +131,7 @@ const dataProcess = () => {
         console.log('generate Finish');
     }
     if (compareType === 'mongo') {
-        CompareMongo(mongoConnection, mongoCollection, data);
+        CompareMongo(mongoConnection, mongoCollection, data, teamsUrl, teamsTitle);
     } else if (compareType === 'json') {
         CompareJSON(compareJSONSave === 'true', data)
     } else {
@@ -139,8 +151,3 @@ if ((inputFile.substr(0, 8) === 'https://') || (inputFile.substr(0, 7) === 'http
     main = fsExtra.readJsonSync(inputFile);
     dataProcess();
 }
-
-
-
-
-
