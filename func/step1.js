@@ -85,7 +85,7 @@ const componentParserByProperty = (propertyList, singleLinePath, nameSpace) => {
         let propertyDescription = property['description'];
         if (propertyType) {
             propertyTypeName = propertyType;
-            propertyType = 'property';
+            console.log(propertyName, propertyTypeName);
             propertyValue = propertyName.toLowerCase() + '_1';
             switch (propertyType) {
                 case 'integer':

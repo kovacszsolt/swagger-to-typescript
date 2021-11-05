@@ -1,5 +1,5 @@
 const templateMock =
-`import { {{objectName}}Interface } from '{{interfacePathSymbol}}{{filePath}}/{{fileName}}.interface';
+    `import { {{objectName}}Interface } from '{{interfacePathSymbol}}{{filePath}}/{{fileName}}.interface';
 
 {{#importList}}
 {{#ifCond fileType "interface"}}
@@ -23,7 +23,7 @@ const {{objectName}}Mock: {{objectName}}Interface = {
 `;
 
 const templateEnum =
-`/**
+    `/**
  * sourceName: {{sourceName}}
  * lineNumber: {{lineNumber}}
  */
@@ -44,7 +44,7 @@ export enum {{objectName}}EnumLabel {
 `;
 
 const templateModel =
-`/**
+    `/**
  * sourceName: {{sourceName}}
  * lineNumber: {{lineNumber}}
  */
@@ -92,9 +92,9 @@ export class {{objectName}}Model implements {{objectName}}Interface {
 }
 `;
 const templateInterface =
-`/**
+    `/**
  * sourceName: {{sourceName}}
- * lineNumber: {{lineNumber}}-{{enumPath}}-
+ * lineNumber: {{lineNumber}}
  */
 {{#importList}}
 {{#ifCond fileType "enum"}}

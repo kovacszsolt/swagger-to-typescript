@@ -37,19 +37,19 @@ const argv = yargs
     .describe('pmo', 'Mock file path')
 
     .alias('pes', 'pathenumsymbol')
-    .default('pathenumsymbol', '@enum')
+    .default('pathenumsymbol', '@enum/')
     .describe('pes', 'Enum symbol')
 
     .alias('pis', 'pathinterfacesymbol')
-    .default('pathinterfacesymbol', '@interface')
+    .default('pathinterfacesymbol', '@interface/')
     .describe('pis', 'Interface symbol')
 
     .alias('pms', 'pathmodelsymbol')
-    .default('pathmodelsymbol', '@model')
+    .default('pathmodelsymbol', '@model/')
     .describe('pms', 'Model symbol')
 
     .alias('pmos', 'pathmocksymbol')
-    .default('pathmocksymbol', '@mock')
+    .default('pathmocksymbol', '@mock/')
     .describe('pmos', 'Mock symbol')
 
     .alias('slp', 'singlelinepath')
