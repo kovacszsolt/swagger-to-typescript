@@ -54,7 +54,7 @@ const argv = yargs
 
     .alias('slp', 'singlelinepath')
     .default('singlelinepath', true)
-    .describe('pm', 'Single Path')
+    .describe('slp', 'Single Path')
 
     .alias('mc', 'mongoconnection')
     .default('mongoconnection', '')
@@ -100,8 +100,7 @@ const interfacePath = argv['pi'];
 const modelPath = argv['pm'];
 const mockPath = argv['pmo'];
 
-const singleLinePath = argv['slp'];
-
+const singleLinePath = argv['slp'] === 'true' ? true : false;
 const enumPathSymbol = argv['pes'];
 const interfacePathSymbol = argv['pis'];
 const modelPathSymbol = argv['pms'];
