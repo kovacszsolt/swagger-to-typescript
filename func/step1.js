@@ -19,6 +19,16 @@ const findObjectType = (objectName) => {
     }
 }
 
+
+const nameConvert = (name) => {
+    let output = name;
+    output = output.split('`').join('');
+    output = output.split('[').join('');
+    output = output.split(']').join('');
+    return output;
+}
+
+
 const findLine = (content) => {
     let lineNumber = -1;
     rawFile.forEach((f, lineIndex) => {
@@ -159,6 +169,25 @@ const componentParserByProperty = (propertyList, singleLinePath, nameSpace) => {
 function step1(inputRawFile, main, debug, singleLinePath, nameSpace) {
     rawFile = inputRawFile;
     components = main['components']['schemas'];
+
+    const oldComponents = {};
+    Object.keys(components).forEach((componentKey) => {
+        const newComponentKey = nameConvert(componentKey);
+        const properties = components[componentKey]['properties'];
+        if (properties) {
+            Object.keys(properties).forEach((property) => {
+                if (properties[property]['items']) {
+                    if (properties[property]['items']['$ref']) {
+                        properties[property]['items']['$ref'] = nameConvert(properties[property]['items']['$ref']);
+                    }
+                }
+                components[componentKey]['properties'][property] = properties[property];
+            });
+        }
+        oldComponents[newComponentKey] = components[componentKey];
+    });
+    components = oldComponents;
+
     Object.keys(components).forEach(key => {
         try {
             const lineNumber = findLine(key);

@@ -1,11 +1,5 @@
 const componentToFileName = (name) => {
     let output = name.split('.').join('-').toLowerCase();
-    output = componentNormalize(output);
-    return output;
-}
-
-const componentNormalize = (name) => {
-    let output = name;
     output = output.split('`').join('');
     output = output.split('[').join('');
     output = output.split(']').join('');
@@ -31,15 +25,19 @@ const fileNameToObjectName = (name) => {
 }
 
 function createImportObject(key, components, singleLinePath, nameSpace) {
-    key = componentNormalize(key);
-    const objectName = key.split('.')[key.split('.').length - 1];
     const fileName = componentToFileName(key.replace(nameSpace, ''));
+    const objectName = key.split('.')[key.split('.').length - 1];
+    if (components[key] === undefined) {
+        console.log('key', key);
+        console.log('--------------------');
+        process.exit(-1);
+    }
     const objectType = components[key].type === 'object' ? 'interface' : 'enum';
     const filePath = fileNameToObjectPath(fileName);
     const longObjectName = fileName.split('-').map(f => firstCharUpper(f)).join('');
     return {
         filePath: singleLinePath ? '' : filePath,
-        fileName: singleLinePath ? fileName : objectName,
+        fileName: singleLinePath ? fileName : objectName.toLowerCase(),
         fileType: objectType,
         objectName: singleLinePath ? longObjectName : objectName
     }
