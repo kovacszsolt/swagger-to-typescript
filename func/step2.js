@@ -64,6 +64,20 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
         fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.mock.ts', fileContent);
     });
 
+
+    interfaceList.forEach((item) => {
+        item.objectName = item.objectName[0].toUpperCase() + item.objectName.slice(1);
+        item.enumPathSymbol = enumPathSymbol;
+        item.interfacePath = interfacePath;
+        item.enumPath = enumPath;
+        item.modelPath = modelPath;
+        const template = Handlebars.compile(templateTest);
+        const path = modelPath + item.filePath + '/';
+        const fileContent = template(item);
+        fsExtra.mkdirSync(path, {recursive: true});
+        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.model.test.ts', fileContent);
+    });
+
 }
 
 module.exports = {step2};

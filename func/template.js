@@ -119,4 +119,35 @@ export interface {{objectName}}Interface {
     {{/propertyList}}
 }
 `
-module.exports = {templateInterface, templateModel, templateEnum, templateMock};
+
+
+const templateTest =
+    `/**
+ * sourceName: {{sourceName}}
+ * lineNumber: {{lineNumber}}
+ */
+
+import { {{objectName}}Model } from '{{modelPathSymbol}}{{filePath}}/{{fileName}}.model';
+import { {{objectName}}Mock } from '{{mockPathSymbol}}{{filePath}}/{{fileName}}.mock';
+
+describe ('{{objectName}}Model', () => {
+
+    it('create with data', () => {
+        const model = new {{objectName}}Model({{objectName}}Mock);
+{{#propertyList}}
+        expect(model.{{name}}).toBe('{{value}}');
+{{/propertyList}}
+    });
+    
+    it('create without data', () => {
+        const model = new {{objectName}}Model({{objectName}}Mock);
+{{#propertyList}}
+        expect(model.{{name}}).toBeUndefined();
+{{/propertyList}}
+    });
+    
+    
+});
+`
+
+module.exports = {templateInterface, templateModel, templateEnum, templateMock, templateTest};
