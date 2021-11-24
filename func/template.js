@@ -7,7 +7,7 @@ import { {{objectName}}Mock } from '{{../mockPathSymbol}}{{filePath}}/{{fileName
 {{/ifCond}}
 {{/importList}}
 
-const {{objectName}}Mock: {{objectName}}Interface = {
+export const {{objectName}}Mock: {{objectName}}Interface = {
 {{#propertyList}}
 {{#ifCond valueType "object"}}
     {{name}}:  {{value}}Mock,
