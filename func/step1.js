@@ -114,6 +114,8 @@ const componentParserByProperty = (propertyList, singleLinePath, nameSpace) => {
                             type: 'array_object',
                             source: refObject.objectName
                         });
+                        propertyValueType = 'array';
+                        propertyValue = refObject.objectName;
                     } else if (property['items']['type']) {
                         propertyType = 'array_property';
                         propertyTypeName = property['items']['type'] + '[]';

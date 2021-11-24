@@ -12,6 +12,9 @@ const {{objectName}}Mock: {{objectName}}Interface = {
 {{#ifCond valueType "object"}}
     {{name}}:  {{value}}Mock,
 {{/ifCond}}
+{{#ifCond valueType "array"}}
+    {{name}}:  [{{value}}Mock],
+{{/ifCond}}
 {{#ifCond valueType "integer"}}
     {{name}}:  {{value}},
 {{/ifCond}}
@@ -94,7 +97,7 @@ export class {{objectName}}Model implements {{objectName}}Interface {
 const templateInterface =
     `/**
  * sourceName: {{sourceName}}
- * lineNumber: {{lineNumber}}
+ * lineNumber: {{lineNumber}}-{{enumPath}}-
  */
 {{#importList}}
 {{#ifCond fileType "enum"}}

@@ -75,7 +75,7 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
         const path = modelPath + item.filePath + '/';
         const fileContent = template(item);
         fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.model.test.ts', fileContent);
+        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.model.spec.ts', fileContent);
     });
 
 }
