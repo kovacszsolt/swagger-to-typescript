@@ -1,6 +1,6 @@
 const fsExtra = require("fs-extra");
 const Handlebars = require("handlebars");
-const {templateEnum, templateInterface, templateModel, templateMock} = require("./template");
+const {templateEnum, templateInterface, templateModel, templateMock, templateTest} = require("./template");
 Handlebars.registerHelper('ifCond', function (v1, v2, options) {
     if (v1 === v2) {
         return options.fn(this);
