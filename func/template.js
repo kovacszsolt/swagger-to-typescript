@@ -145,7 +145,7 @@ describe ('{{objectName}}Model', () => {
         expect(model.{{name}}).toBe({{value}});
 {{/ifCond}}
 {{#ifCond type "string"}}
-        expect(model.{{name}}).toBe({{value}});
+        expect(model.{{name}}).toBe('{{value}}');
 {{/ifCond}}
 {{#ifCond type "number"}}
         expect(model.{{name}}).toBe(1);

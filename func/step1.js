@@ -1,84 +1,226 @@
-const fsExtra = require("fs-extra");
-const Handlebars = require("handlebars");
-const {templateEnum, templateInterface, templateModel, templateMock, templateTest} = require("./template");
-Handlebars.registerHelper('ifCond', function (v1, v2, options) {
-    if (v1 === v2) {
-        return options.fn(this);
+const fsExtra = require('fs-extra')
+const fs = require('fs')
+const {createImportObject, firstCharUpper} = require("./func.js");
+
+let rawFile;
+let components;
+let fileName = './data/object.json';
+if (process.argv.length === 3) {
+    fileName = process.argv[2];
+}
+const interfaceList = [];
+
+const findObjectType = (objectName) => {
+    const findComponent = components[objectName];
+    if (findComponent) {
+        return findComponent['type'];
+    } else {
+        return '__unknown__';
     }
-    return options.inverse(this);
-});
+}
 
-function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSymbol, interfacePathSymbol, modelPathSymbol, mockPath, mockPathSymbol) {
-    const interfaceList = data.filter(f => f.type === 'interface');
-    const enumList = data.filter(f => f.type === 'enum');
-    if (purgeTarget) {
-        fsExtra.emptyDirSync(enumPath);
-        fsExtra.emptyDirSync(interfacePath);
-        fsExtra.emptyDirSync(modelPath);
+
+const nameConvert = (name) => {
+    let output = name;
+    output = output.split('`').join('');
+    output = output.split('[').join('');
+    output = output.split(']').join('');
+    return output;
+}
+
+
+const findLine = (content) => {
+    let lineNumber = -1;
+    rawFile.forEach((f, lineIndex) => {
+            if (f.indexOf(content) !== -1) {
+                lineNumber = lineIndex + 1;
+            }
+        }
+    );
+    return lineNumber;
+}
+
+const componentParser = (objectName, component, singleLinePath, nameSpace) => {
+    let outputPropertyList;
+    let type = '';
+    switch (component.type) {
+        case 'string':
+            outputPropertyList = componentParserByEnum(component.enum, true);
+            type = 'enum';
+            break;
+        case 'integer':
+            outputPropertyList = componentParserByEnum(component.enum, false);
+            type = 'enum';
+            break;
+        case 'object':
+            outputPropertyList = componentParserByProperty(component.properties, singleLinePath, nameSpace);
+            type = 'interface';
+            break;
+        default:
+            console.log(component);
+            process.exit(0);
     }
-
-    interfaceList.forEach((item) => {
-        item.objectName = item.objectName[0].toUpperCase() + item.objectName.slice(1);
-        item.enumPathSymbol = enumPathSymbol;
-        item.interfacePathSymbol = interfacePathSymbol;
-        item.modelPathSymbol = modelPathSymbol;
-        item.interfacePath = interfacePath;
-        item.enumPath = enumPath;
-        item.modelPath = modelPath;
-        const template = Handlebars.compile(templateInterface);
-        const path = interfacePath + item.filePath + '/';
-        const fileContent = template(item);
-        fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.interface.ts', fileContent);
-    });
-
-    enumList.forEach((item) => {
-        item.objectName = item.objectName[0].toUpperCase() + item.objectName.slice(1);
-        const template = Handlebars.compile(templateEnum);
-        const path = enumPath + item.filePath + '/';
-        const fileContent = template(item);
-        fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.enum.ts', fileContent);
-    });
-
-    interfaceList.forEach((item) => {
-        item.objectName = item.objectName[0].toUpperCase() + item.objectName.slice(1);
-        item.enumPathSymbol = enumPathSymbol;
-        item.interfacePath = interfacePath;
-        item.enumPath = enumPath;
-        item.modelPath = modelPath;
-        const template = Handlebars.compile(templateModel);
-        const path = modelPath + item.filePath + '/';
-        const fileContent = template(item);
-        fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.model.ts', fileContent);
-    });
-
-    interfaceList.forEach((item) => {
-        item.objectName = item.objectName[0].toUpperCase() + item.objectName.slice(1);
-        item.mockPathSymbol = mockPathSymbol;
-        const template = Handlebars.compile(templateMock);
-        const path = mockPath + item.filePath + '/';
-        const fileContent = template(item);
-        fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.mock.ts', fileContent);
-    });
-
-
-
-    interfaceList.forEach((item) => {
-        item.objectName = item.objectName[0].toUpperCase() + item.objectName.slice(1);
-        item.enumPathSymbol = enumPathSymbol;
-        item.interfacePath = interfacePath;
-        item.enumPath = enumPath;
-        item.modelPath = modelPath;
-        const template = Handlebars.compile(templateTest);
-        const path = modelPath + item.filePath + '/';
-        const fileContent = template(item);
-        fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.spec.ts', fileContent);
-    });
+    const output = {
+        type: type,
+    };
+    Object.assign(output, outputPropertyList);
+    return output;
 
 }
 
-module.exports = {step2};
+const componentParserByEnum = (values, isString) => {
+    const output = [];
+    values.forEach((value, index) => {
+        const outputItem = {
+            name: (!isString ? 'VALUE' : '') + value,
+            value: (isString ? index : value)
+        };
+        output.push(outputItem)
+    });
+    return {propertyList: output};
+}
+
+const componentParserByProperty = (propertyList, singleLinePath, nameSpace) => {
+    const outputPropertyList = [];
+    const outputImportList = [];
+    const outputMapList = [];
+    Object.keys(propertyList).forEach((propertyName) => {
+        let propertyTypeName;
+        let outputProperty;
+
+        const property = propertyList[propertyName];
+        let propertyType = property['type'];
+        let propertyValue = '';
+        let propertyValueType = 'string';
+        let propertyDescription = property['description'];
+        if (propertyType) {
+            propertyTypeName = propertyType;
+            propertyValue = propertyName.toLowerCase() + '_1';
+            switch (propertyType) {
+                case 'integer':
+                case 'number':
+                    propertyType = 'number';
+                    propertyValueType = 'number';
+                    propertyValue = 1;
+                    break;
+                case 'array' :
+                    if (property['items']['$ref']) {
+                        const refItemName = property['items']['$ref'].replace('#/components/schemas/', '');
+                        const refObject = createImportObject(refItemName, components, singleLinePath, nameSpace);
+                        propertyType = 'array_object';
+                        propertyTypeName = refObject.objectName;
+                        outputImportList.push(refObject);
+                        outputMapList.push({
+                            name: propertyName,
+                            type: 'array_object',
+                            source: refObject.objectName
+                        });
+                        propertyValueType = 'array';
+                        propertyValue = refObject.objectName;
+                    } else if (property['items']['type']) {
+                        propertyType = 'array_property';
+                        propertyTypeName = property['items']['type'] + '[]';
+                    }
+                    break;
+            }
+        } else {
+            if (Object.keys(property)[0] === '$ref') {
+                const refName = property['$ref'];
+                const refItemName = refName.substr(refName.lastIndexOf('/') + 1);
+                const refType = findObjectType(refItemName);
+                const refObject = createImportObject(refItemName, components, singleLinePath);
+                outputImportList.push(refObject);
+                propertyType = refType === 'object' ? 'object' : 'enum';
+                propertyTypeName = firstCharUpper(refObject.objectName);
+                propertyValueType = 'string';
+                switch (propertyType) {
+                    case 'enum':
+                        propertyValueType = components[refItemName].type;
+                        propertyValue = components[refItemName].enum[0];
+                        break;
+                    case 'object':
+                        propertyValueType = 'object';
+                        propertyValue = refObject.objectName;
+                        break;
+                    default:
+                        console.log(propertyType);
+                }
+                outputMapList.push({
+                    name: propertyName,
+                    type: propertyType,
+                    source: refObject.objectName
+                });
+            }
+        }
+        outputProperty = {
+            name: propertyName,
+            description: propertyDescription,
+            type: propertyType,
+            value: propertyValue,
+            valueType: propertyValueType,
+            typeName: propertyTypeName,
+        };
+        outputPropertyList.push(outputProperty);
+    });
+    return {
+        mapList: outputMapList,
+        importList: outputImportList,
+        propertyList: outputPropertyList
+    }
+}
+
+function step1(inputRawFile, main, debug, singleLinePath, nameSpace) {
+    rawFile = inputRawFile;
+    components = main['components']['schemas'];
+
+    const oldComponents = {};
+    Object.keys(components).forEach((componentKey) => {
+        const newComponentKey = nameConvert(componentKey);
+        const properties = components[componentKey]['properties'];
+        if (properties) {
+            Object.keys(properties).forEach((property) => {
+                if (properties[property]['items']) {
+                    if (properties[property]['items']['$ref']) {
+                        properties[property]['items']['$ref'] = nameConvert(properties[property]['items']['$ref']);
+                    }
+                }
+                components[componentKey]['properties'][property] = properties[property];
+            });
+        }
+        oldComponents[newComponentKey] = components[componentKey];
+    });
+    components = oldComponents;
+
+    Object.keys(components).forEach(key => {
+        try {
+            const lineNumber = findLine(key);
+            const mainData = createImportObject(key, components, singleLinePath, nameSpace);
+            const component = components[key];
+            const propertyList = componentParser(mainData.objectName, component, singleLinePath, nameSpace);
+            const interfaceItem = {
+                type: propertyList['type'],
+                lineNumber: lineNumber,
+                sourceName: key,
+                description: component['description'],
+                importList: propertyList['importList'],
+                mapList: propertyList['mapList'],
+                propertyList: propertyList['propertyList']
+            };
+            Object.assign(interfaceItem, mainData);
+            interfaceList.push(interfaceItem);
+        } catch (error) {
+            console.log('-------------------------------------');
+            console.log(components[key]);
+            console.log(key, 'error');
+            console.log(error);
+            console.log('-------------------------------------');
+            process.exit(1);
+        }
+    });
+    if (debug) {
+        fsExtra.writeFileSync('./debug.json', JSON.stringify(interfaceList, null, '\t'));
+    }
+    return interfaceList;
+}
+
+module.exports = {step1};
