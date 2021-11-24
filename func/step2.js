@@ -65,6 +65,7 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
     });
 
 
+
     interfaceList.forEach((item) => {
         item.objectName = item.objectName[0].toUpperCase() + item.objectName.slice(1);
         item.enumPathSymbol = enumPathSymbol;
@@ -75,7 +76,7 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
         const path = modelPath + item.filePath + '/';
         const fileContent = template(item);
         fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.model.spec.ts', fileContent);
+        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.spec.ts', fileContent);
     });
 
 }

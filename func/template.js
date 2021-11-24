@@ -138,7 +138,18 @@ describe ('{{objectName}}Model', () => {
     it('create with data', () => {
         const model = new {{objectName}}Model({{objectName}}Mock);
 {{#propertyList}}
-        expect(model.{{name}}).toBe('{{value}}');
+{{#ifCond type "array_object"}}
+        expect(model.{{name}}).toEqual([{{value}}]);
+{{/ifCond}}
+{{#ifCond type "enum"}}
+        expect(model.{{name}}).toBe({{value}});
+{{/ifCond}}
+{{#ifCond type "string"}}
+        expect(model.{{name}}).toBe({{value}});
+{{/ifCond}}
+{{#ifCond type "number"}}
+        expect(model.{{name}}).toBe({{value}});
+{{/ifCond}}
 {{/propertyList}}
     });
     
