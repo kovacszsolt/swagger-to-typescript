@@ -18,6 +18,9 @@ const {{objectName}}Mock: {{objectName}}Interface = {
 {{#ifCond valueType "integer"}}
     {{name}}:  {{value}},
 {{/ifCond}}
+{{#ifCond valueType "number"}}
+    {{name}}:  {{value}},
+{{/ifCond}}
 {{#ifCond valueType "string"}}
     {{name}}:  '{{value}}',
 {{/ifCond}}
