@@ -29,7 +29,7 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
         const path = interfacePath + item.filePath + '/';
         const fileContent = template(item);
         fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.interface.ts', fileContent);
+        fsExtra.writeFileSync(path + item.fileName + '.interface.ts', fileContent);
     });
 
     enumList.forEach((item) => {
@@ -38,7 +38,7 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
         const path = enumPath + item.filePath + '/';
         const fileContent = template(item);
         fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.enum.ts', fileContent);
+        fsExtra.writeFileSync(path + item.fileName+ '.enum.ts', fileContent);
     });
 
     interfaceList.forEach((item) => {
@@ -51,7 +51,7 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
         const path = modelPath + item.filePath + '/';
         const fileContent = template(item);
         fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.model.ts', fileContent);
+        fsExtra.writeFileSync(path + item.fileName + '.model.ts', fileContent);
     });
 
     interfaceList.forEach((item) => {
@@ -61,7 +61,7 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
         const path = mockPath + item.filePath + '/';
         const fileContent = template(item);
         fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.mock.ts', fileContent);
+        fsExtra.writeFileSync(path + item.fileName + '.mock.ts', fileContent);
     });
 
 
@@ -76,7 +76,7 @@ function step2(data, purgeTarget, enumPath, interfacePath, modelPath, enumPathSy
         const path = modelPath + item.filePath + '/';
         const fileContent = template(item);
         fsExtra.mkdirSync(path, {recursive: true});
-        fsExtra.writeFileSync(path + item.fileName.toLowerCase() + '.spec.ts', fileContent);
+        fsExtra.writeFileSync(path + item.fileName + '.spec.ts', fileContent);
     });
 
 }

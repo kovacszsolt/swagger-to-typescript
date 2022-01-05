@@ -1,5 +1,4 @@
 const fsExtra = require('fs-extra')
-const fs = require('fs')
 const {createImportObject, firstCharUpper} = require("./func.js");
 
 let rawFile;
@@ -95,7 +94,7 @@ const componentParserByProperty = (propertyList, singleLinePath, nameSpace) => {
         let propertyDescription = property['description'];
         if (propertyType) {
             propertyTypeName = propertyType;
-            propertyValue = propertyName.toLowerCase() + '_1';
+            propertyValue = propertyName+ '_1';
             switch (propertyType) {
                 case 'integer':
                 case 'number':

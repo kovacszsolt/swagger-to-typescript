@@ -1,5 +1,5 @@
 const componentToFileName = (name) => {
-    let output = name.split('.').join('-').toLowerCase();
+    let output = name.split('.').join('-');
     output = output.split('`').join('');
     output = output.split('[').join('');
     output = output.split(']').join('');
@@ -37,7 +37,7 @@ function createImportObject(key, components, singleLinePath, nameSpace) {
     const longObjectName = fileName.split('-').map(f => firstCharUpper(f)).join('');
     return {
         filePath: singleLinePath ? '' : filePath,
-        fileName: singleLinePath ? fileName : objectName.toLowerCase(),
+        fileName: singleLinePath ? fileName.toLowerCase() : objectName.toLowerCase(),
         fileType: objectType,
         objectName: singleLinePath ? longObjectName : objectName
     }

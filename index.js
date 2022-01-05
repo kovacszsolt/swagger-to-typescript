@@ -3,7 +3,6 @@ const yargs = require('yargs');
 const {step1} = require("./func/step1");
 const {step2} = require("./func/step2");
 const fs = require("fs");
-const fsExtra = require("fs-extra");
 const request = require("request");
 const {CompareMongo} = require("./func/mongo");
 const {CompareJSON} = require("./func/json");
@@ -141,13 +140,23 @@ const dataProcess = () => {
 
 if ((inputFile.substr(0, 8) === 'https://') || (inputFile.substr(0, 7) === 'http://')) {
     request(inputFile, (err, res, body) => {
-        rawFile = body.toString().split('\n');
-        main = JSON.parse(body.toString());
+        const nameSpaceArray = nameSpace.split(',');
+        let rawBase = body.toString();
+        nameSpaceArray.forEach(nS => {
+            rawBase = rawBase.replaceAll(nS, '');
+        });
+        rawFile = rawBase.split('\r\n');
+        main =JSON.parse(rawBase);
         dataProcess();
     });
 } else {
-    rawFile = fs.readFileSync(inputFile, 'utf8').split('\r\n');
-    main = fsExtra.readJsonSync(inputFile);
+    const nameSpaceArray = nameSpace.split(',');
+    let rawBase = fs.readFileSync(inputFile, 'utf8');
+    nameSpaceArray.forEach(nS => {
+        rawBase = rawBase.toString().replaceAll(nS, '');
+    });
+    rawFile = rawBase.split('\r\n');
+    main =JSON.parse(rawBase);
     dataProcess();
 }
 
